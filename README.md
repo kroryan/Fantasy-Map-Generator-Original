@@ -58,3 +58,221 @@ An integration with [Ollama](https://ollama.com/) has been added as a new provid
 **Goal:**
 
 The primary goal of this integration was to provide a simple and functional way to use local Ollama models within the Fantasy Map Generator's AI text generation feature, ensuring that existing functionalities, especially the "generate text for notes" button, remain operational. Initial issues with the dialog not opening were resolved by refining how and when the dialog and its internal event listeners are initialized.
+
+## 💻 Desktop Application
+
+Esta versión incluye una **aplicación de escritorio** construida con Electron que funciona completamente offline.
+
+### 🚀 Características de la Versión Desktop
+
+- ✅ **Funciona completamente offline** - No requiere conexión a internet
+- ✅ **Sin dependencias de servidor** - Incluye servidor HTTP integrado con Node.js nativo
+- ✅ **Instalación sencilla** - Archivo ejecutable portable
+- ✅ **Menús nativos** - Interfaz integrada con el sistema operativo
+- ✅ **Rendimiento optimizado** - Mejor performance que la versión web
+- ✅ **Soporte multiplataforma** - Windows y Linux
+
+### 📦 Archivos Compilados Disponibles
+
+Las versiones compiladas están listas para usar en la carpeta `build-output/`:
+- **Windows**: `Fantasy Map Generator-1.0.0-portable.exe` (~250 MB)
+- **Linux**: `Fantasy Map Generator-1.0.0-linux.tar.gz` (~200 MB)
+
+**Para usar:**
+1. **Windows**: Ejecutar directamente el archivo `.exe`
+2. **Linux**: Extraer el `.tar.gz` y ejecutar el binario
+
+### 🛠️ Compilación desde Código Fuente
+
+#### Prerrequisitos
+
+**Software obligatorio:**
+- [Node.js](https://nodejs.org/) versión 18 o superior
+- npm (incluido con Node.js)
+- Mínimo 5 GB de espacio libre en disco
+
+**Verificar instalación:**
+```bash
+node --version    # Debe mostrar v18.x.x o superior
+npm --version     # Debe mostrar 9.x.x o superior
+```
+
+#### Pasos de Instalación Completos
+
+1. **Instalar dependencias del proyecto**
+   ```bash
+   npm install
+   ```
+   
+   ⚠️ **Nota**: Los warnings sobre paquetes deprecados son normales y no afectan la funcionalidad.
+
+2. **Probar funcionamiento en modo desarrollo**
+   ```bash
+   npm run electron
+   ```
+   
+   ✅ **Verificación de funcionamiento correcto**:
+   - Debe aparecer en consola: "Electron app ready"
+   - Debe aparecer: "Servidor HTTP iniciado en puerto XXXX"
+   - Debe aparecer: "Ventana mostrada"
+   - La aplicación debe abrir y mostrar el mapa correctamente
+   
+   ❌ **Errores normales que puedes ignorar**:
+   - Warnings de GPU/hardware acceleration
+   - Mensajes sobre Vulkan o DirectX
+   - Warnings sobre módulos deprecados
+
+3. **Cerrar la aplicación de prueba** antes de compilar
+
+#### Compilación para Distribución
+
+**🖥️ Para Windows (Archivo Portable):**
+```bash
+npm run build-win
+```
+
+**🐧 Para Linux (Archivo comprimido):**
+```bash
+npm run build-linux
+```
+
+**🌐 Para Ambas Plataformas:**
+```bash
+npm run build-all
+```
+
+#### Resultado Esperado de la Compilación
+
+**Tiempo de compilación:** 2-5 minutos (dependiendo de tu hardware)
+
+**Archivos generados en `build-output/`:**
+```
+build-output/
+├── Fantasy Map Generator-1.0.0-portable.exe    # Windows (±250 MB)
+├── Fantasy Map Generator-1.0.0-linux.tar.gz    # Linux (±200 MB)
+├── builder-debug.yml                            # Log de debug
+├── builder-effective-config.yaml                # Configuración usada
+├── win-unpacked/                                # Archivos descomprimidos Windows
+└── linux-unpacked/                              # Archivos descomprimidos Linux
+```
+
+**✅ Indicadores de compilación exitosa:**
+1. No errores fatales en la consola (warnings son normales)
+2. Archivo ejecutable generado con tamaño correcto
+3. Mensaje final: "build completed successfully"
+
+#### 🧪 Probar el Ejecutable Compilado
+
+**Windows:**
+```powershell
+cd build-output
+.\Fantasy Map Generator-1.0.0-portable.exe
+```
+
+**Linux:**
+```bash
+cd build-output
+tar -xzf "Fantasy Map Generator-1.0.0-linux.tar.gz"
+cd linux-unpacked
+./fantasy-map-generator
+```
+
+#### 🔧 Solución de Problemas Comunes
+
+**❌ Error: "Not enough space on disk"**
+```bash
+# Solución:
+# 1. Liberar al menos 5 GB de espacio en disco
+# 2. Limpiar caché de npm:
+npm cache clean --force
+
+# 3. Si persiste, limpiar todo y reinstalar:
+Remove-Item node_modules -Recurse -Force
+Remove-Item build-output -Recurse -Force
+npm install
+```
+
+**❌ Error: "Process cannot access the file"**
+```bash
+# Solución:
+# 1. Cerrar TODAS las instancias de la aplicación
+# 2. Eliminar carpeta de build:
+Remove-Item build-output -Recurse -Force
+
+# 3. Reintentar compilación:
+npm run build-win
+```
+
+**❌ Error: "Cannot find module 'express'"**
+- ✅ **Este error ya está solucionado** en la versión actual
+- La aplicación usa el módulo HTTP nativo de Node.js (no Express)
+- Si aparece, ejecutar: `npm install`
+
+**❌ Error de permisos en Linux (Windows)**
+- Esto es normal cuando compilas para Linux desde Windows
+- El archivo `.tar.gz` se genera correctamente y funciona en Linux
+
+**❌ Aplicación no inicia o error "serverless"**
+```bash
+# Diagnóstico:
+npm run electron  # Debe funcionar sin errores
+
+# Si funciona en desarrollo pero no el compilado:
+# El problema está en la configuración de electron-builder
+# Verificar que electron-main.js existe y no está vacío
+```
+
+#### 📋 Scripts Disponibles
+
+| Comando | Descripción | Cuándo Usar |
+|---------|-------------|-------------|
+| `npm run electron` | Ejecutar en desarrollo | Probar cambios, debugging |
+| `npm run build-win` | Compilar solo Windows | Desarrollo en Windows |
+| `npm run build-linux` | Compilar solo Linux | Necesitas versión Linux |
+| `npm run build-all` | Compilar ambas plataformas | Distribución completa |
+
+#### 🎯 Flujo de Trabajo Recomendado
+
+1. **Desarrollo:**
+   ```bash
+   npm install              # Solo la primera vez
+   npm run electron         # Probar cambios
+   ```
+
+2. **Antes de compilar:**
+   ```bash
+   # Cerrar aplicación de desarrollo
+   npm run electron         # Verificar que funciona
+   # Ctrl+C para cerrar
+   ```
+
+3. **Compilación final:**
+   ```bash
+   npm run build-all        # O build-win / build-linux
+   ```
+
+4. **Verificación:**
+   ```bash
+   # Probar el ejecutable generado
+   cd build-output
+   # Ejecutar el archivo correspondiente
+   ```
+
+#### ⚙️ Configuración Técnica
+
+**Configuración de electron-builder en `package.json`:**
+- **Windows**: Target `portable` (no requiere instalador)
+- **Linux**: Target `tar.gz` (compatible con todas las distribuciones)
+- **Directorio de salida**: `build-output/`
+- **Compresión**: Normal (balance entre tamaño y velocidad)
+
+**Archivos incluidos en el build:**
+- Todo el código fuente necesario
+- Módulos de Node.js requeridos
+- Servidor HTTP integrado
+- Iconos y recursos
+- **Excluidos**: archivos de desarrollo, cache, git, docker
+
+Para información técnica adicional, consultar `README-DESKTOP.md`.
+
+---

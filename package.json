@@ -1,0 +1,125 @@
+{
+  "name": "fantasy-map-generator",
+  "version": "1.0.0",
+  "description": "Azgaar's Fantasy Map Generator - Desktop Application",
+  "main": "electron-main.js",
+  "scripts": {
+    "electron": "electron .",
+    "electron-dev": "electron . --dev",
+    "build": "electron-builder",
+    "build-win": "electron-builder --win",
+    "build-linux": "electron-builder --linux",
+    "build-linux-alt": "node build-linux.js",
+    "build-all": "electron-builder --win --linux",
+    "build-win-only": "electron-builder --win --x64",
+    "pack-win": "electron-packager . fantasy-map-generator --platform=win32 --arch=x64 --out=dist --overwrite",
+    "pack-linux": "electron-packager . fantasy-map-generator --platform=linux --arch=x64 --out=dist --overwrite",
+    "dist": "npm run build-all",
+    "clean": "rimraf build-output dist electron-cache",
+    "postinstall": "electron-builder install-app-deps"
+  },
+  "build": {
+    "appId": "com.azgaar.fantasy-map-generator",
+    "productName": "Fantasy Map Generator",
+    "directories": {
+      "output": "build-output",
+      "buildResources": "build"
+    },
+    "files": [
+      "**/*",
+      "!build-output/**/*",
+      "!.git/**/*",
+      "!.github/**/*",
+      "!.docker/**/*",
+      "!.vscode/**/*",
+      "!README.md",
+      "!LICENSE",
+      "!*.md",
+      "!.gitignore",
+      "!.dockerignore",
+      "!electron-main-backup.js",
+      "!electron-main-simple.js",
+      "!electron-main-fixed.js",
+      "!run_*.bat",
+      "!Dockerfile",
+      "!node_modules/.cache/**/*"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "portable",
+          "arch": ["x64"]
+        }
+      ],
+      "icon": "images/icons/icon_x512.png",
+      "artifactName": "${productName}-${version}-win.${ext}"
+    },
+    "linux": {
+      "target": [
+        {
+          "target": "tar.gz",
+          "arch": ["x64"]
+        }
+      ],
+      "icon": "images/icons/icon_x512.png",
+      "category": "Graphics",
+      "artifactName": "${productName}-${version}-linux.${ext}",
+      "desktop": {
+        "Name": "Fantasy Map Generator",
+        "Comment": "Azgaar's Fantasy Map Generator",
+        "Icon": "fantasy-map-generator",
+        "Type": "Application",
+        "Categories": "Graphics;Education;"
+      }
+    },
+    "portable": {
+      "artifactName": "${productName}-${version}-portable.${ext}"
+    },
+    "appImage": {
+      "license": "LICENSE",
+      "category": "Graphics",
+      "synopsis": "Fantasy Map Generator by Azgaar",
+      "desktop": {
+        "Name": "Fantasy Map Generator",
+        "Comment": "Generate fantasy world maps",
+        "Keywords": "fantasy;map;generator;cartography;worldbuilding;",
+        "Icon": "fantasy-map-generator"
+      }
+    },
+    "compression": "normal",
+    "forceCodeSigning": false,
+    "nodeGypRebuild": false,
+    "buildDependenciesFromSource": false,
+    "npmRebuild": false,
+    "removePackageScripts": true,
+    "electronDownload": {
+      "cache": "./electron-cache"
+    },
+    "extraMetadata": {
+      "main": "electron-main.js"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    }
+  },
+  "keywords": [
+    "fantasy",
+    "map",
+    "generator",
+    "cartography",
+    "worldbuilding"
+  ],
+  "author": "Azgaar",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^27.0.0",
+    "electron-builder": "^24.6.0",
+    "electron-packager": "^17.1.2"
+  },
+  "dependencies": {
+    "@capacitor/android": "^7.3.0",
+    "@capacitor/cli": "^7.3.0",
+    "@capacitor/core": "^7.3.0"
+  }
+}
